@@ -1,13 +1,8 @@
-namespace NotificationApp.DataAccess.Interfaces
+public interface INotificationProvider
 {
-    public interface INotificationProvider
-    {
-        void Subscribe(string topic);
-        void Unsubscribe(string topic);
-        void OnMessageReceived(Action<string> handler);
-    }
+    void Subscribe(IEnumerable<Topic> topics);
+    void Unsubscribe(IEnumerable<Topic> topics);
+
+    event Action<DependencyHandler> OnMessageReceived;
+
 }
-
-
-
-
