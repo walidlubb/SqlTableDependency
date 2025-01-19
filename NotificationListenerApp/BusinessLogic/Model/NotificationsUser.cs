@@ -1,6 +1,6 @@
 
 
-    public class NotificationsUser
+    public class NotificationsUsers
     {
         public long Id { get; set; }
         public long UserId { get; set; }

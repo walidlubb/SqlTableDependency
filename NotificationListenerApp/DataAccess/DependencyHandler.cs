@@ -1,32 +1,13 @@
-using System.Data.SqlClient;
+using NPOI.SS.Formula.Functions;
+using TableDependency.SqlClient.Base.Delegates;
 
-public class DependencyHandler
+public class DependencyHandler<T>
 {
-    private readonly string _connectionString;
+    public event Action<DependencyHandler<T>> OnChanged;
 
-    public DependencyHandler(string connectionString)
+    public void TriggerChange()
     {
-        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-    }
-
-    public SqlConnection GetSqlConnection()
-    {
-        // Create and return a new SQL connection
-        return new SqlConnection(_connectionString);
-    }
-
-    public void ValidateConnection()
-    {
-        using var connection = GetSqlConnection();
-        try
-        {
-            connection.Open();
-            Console.WriteLine("SQL Connection validated successfully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"SQL Connection validation failed: {ex.Message}");
-            throw;
-        }
+        // Trigger the OnChanged event
+        OnChanged?.Invoke(this);
     }
 }

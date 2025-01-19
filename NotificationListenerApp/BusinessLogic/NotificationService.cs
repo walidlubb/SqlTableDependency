@@ -1,5 +1,3 @@
-using System.Threading.Channels;
-using NotificationApp.DataAccess.Interfaces;
 
 public class NotificationService
 {
@@ -19,20 +17,35 @@ public class NotificationService
 
     public void Initialize()
     {
-        _provider.Subscribe("General");
-        foreach (var channel in _channels)
+       
+        _provider.OnMessageReceived += (handler) =>
         {
-            channel.ValidateConfig();
-        }
+            HandleNotification(handler.Message);
+         
+        };
+        // Example of calling the Subscribe method
+        var topics = new List<Topic> { new Topic { Name = "NotificationsUsers" } };
+        _provider.Subscribe(topics);
+
+        //foreach (var channel in _channels)
+        //{
+        //    channel.ValidateConfig();
+        //}
     }
 
-    public void HandleNotification(Notification notification)
+    public void HandleNotification(Message Message)
     {
-        _router.Route(notification);
+        //_router.Route(notification);
 
-        foreach (var channel in _channels)
-        {
-            channel.Send(notification);
-        }
+        //foreach (var channel in _channels)
+        //{
+        //    channel.Send(notification);
+        //}
+
+        Console.WriteLine("Received message: ");
+        Console.WriteLine($"Message ID: {Message.Id}");
+        Console.WriteLine($"Message Title: {Message.Title}");
+        Console.WriteLine($"Message Description: {Message.Description}");
+        Console.WriteLine($"Message Source: {Message.SourceMessage}");
     }
 }
